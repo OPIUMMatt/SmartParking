@@ -1,0 +1,16 @@
+Lista de afazeres:
+	-> Pegar a maquete no depósito 5 (depósito do Gabriel,
+	falar com o pessoal da coordenação para pegar a chave)
+	-> Colocar os servo-motores nos seus lugares
+	-> Colocar as cancelas nos servo-motores
+	-> Ligar a fiação dos servo-motores
+	-> Colocar os LEDs nos seus lugares
+	-> Ligar a fiação dos LEDs
+	-> Colocar o botão em algum lugar na maquete
+	-> Ligar a fiação do botão
+	-> Arrumar algum fundo preto (com o contact preto)
+	-> Posicionar as câmeras
+	-> Setar o código python (instalar modulos)
+	-> Setar o código no arduino
+	-> Conectar arduino no pc
+	-> Conectar as câmeras em um hub e o hub no pc
