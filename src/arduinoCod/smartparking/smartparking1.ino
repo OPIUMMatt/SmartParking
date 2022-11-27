@@ -3,14 +3,12 @@
 #define pinServo1 6
 #define pinServo2 7
 #define LED1 2
-#define LED2 3
-#define LED3 4
+#define LED2 4
+#define LED3 3
 #define LED4 5
 #define LED5 8
 #define LED6 9
 
-int botao = 10;
-int pressionado = 0;
 Servo servo1;
 Servo servo2;
 
@@ -19,30 +17,31 @@ void setup() {
   	Serial.begin(9600);
   	servo1.attach(pinServo1);
   	servo2.attach(pinServo2);
-	pinMode(LED1, OUTPUT);
+	  pinMode(LED1, OUTPUT);
   	pinMode(LED2, OUTPUT);
   	pinMode(LED3, OUTPUT);
   	pinMode(LED4, OUTPUT);
   	pinMode(LED5, OUTPUT);
   	pinMode(LED6, OUTPUT);
-  	pinMode(botao, INPUT);
   	Serial.print("\nComecou");
+    
+    digitalWrite(LED1, HIGH);
+    digitalWrite(LED2, HIGH);
+    digitalWrite(LED3, HIGH);
+    digitalWrite(LED4, HIGH);
+    digitalWrite(LED5, HIGH);
+    digitalWrite(LED6, HIGH);
+    
 }
 
 void loop() {
   	// put your main code here, to run repeatedly:
-
+    
   	if(Serial.available() > 0){
     	String msg = Serial.readString();
       	Serial.print("\n" + msg);
       	read_protocol(msg);
   	}
-  
-  	pressionado = digitalRead(botao);
-    
-	if (pressionado == HIGH){
-		//Serial.print("CAM");
-	} 
 }
 
 void desligaLED(String msg){
@@ -149,7 +148,7 @@ void fecharCancela(String msg){
   char pin = msg[3];
   
   if (pin == '1'){
-    for (int i = 0; i <= 90; i++){
+    for (int i = 90; i >= 0; i--){
       	servo1.write(i);
       	delay(30);
     }    
@@ -166,7 +165,7 @@ void abrirCancela(String msg){
 	char pin = msg[3];
     
     if (pin == '1'){
-    	for (int i = 90; i >= 0; i--){
+    	for (int i = 0; i <= 90; i++){
       		servo1.write(i);
       		delay(30);
     	}
