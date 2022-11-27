@@ -1,5 +1,5 @@
 from src import banco
-from src import pyduino as ard
+#from src import pyduino as ard
 from tkinter import ttk, messagebox, LabelFrame, Tk, Label, Entry, END, Toplevel
 import time as t
 from src import camFunctions
@@ -9,6 +9,8 @@ import cv2
 class interface():
 
     def __init__(self):
+        #self.ard = ard
+
         #Iniciando a janela principal do app
         self.app = Tk() 
         self.app.title("Estacionamento")
@@ -52,23 +54,30 @@ class interface():
         self.cancelaAberta = None
         self.camPlaca()
 
-        #WebCam2
-        self.cap2= cv2.VideoCapture(2)
-        self.camVaga1()
+        # #WebCam2
+        # self.cap2= cv2.VideoCapture(1)
+        # self.cam1Vaga()
 
-        #WebCam3 Window
-        # self.label =Label(self.webCam1)
-        # self.label.grid(row=0, column=0)
-        # self.cap= cv2.VideoCapture(3)
-        #self.camVaga2()
+        # #WebCam3
+        # self.cap3= cv2.VideoCapture(2)
+        # self.cam2Vaga()
 
 
         self.app.mainloop()
 
-    def camVaga1(self):
+    def cam2Vaga(self):
+        cv2image= self.cap3.read()[1]
+        camFunctions.camVaga4(frame=cv2image, ard= self.ard)
+        camFunctions.camVaga5(frame=cv2image, ard= self.ard)
+        camFunctions.camVaga6(frame=cv2image, ard= self.ard)
+        self.app.after(30, self.cam2Vaga)
+
+    def cam1Vaga(self):
         cv2image= self.cap2.read()[1]
-        camFunctions.camVaga1(frame=cv2image)
-        self.app.after(30, self.camVaga1)
+        camFunctions.camVaga1(frame=cv2image, ard= self.ard)
+        camFunctions.camVaga2(frame=cv2image, ard= self.ard)
+        camFunctions.camVaga3(frame=cv2image, ard= self.ard)
+        self.app.after(30, self.cam1Vaga)
 
     def camPlaca(self):
         cv2image= self.cap1.read()[1]
