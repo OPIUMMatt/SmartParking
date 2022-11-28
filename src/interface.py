@@ -1,3 +1,7 @@
+# Esse arquivo guarda a classe principal do programa, que é a interface, é nessa classe que tudo é inicializado 
+# e que faz a conexão da IA, do arduino e do banco de dados com a interface
+
+#Importando dependencias
 from src import banco
 #from src import pyduino as ard
 from tkinter import ttk, messagebox, LabelFrame, Tk, Label, Entry, END, Toplevel
@@ -8,6 +12,7 @@ import cv2
 
 class interface():
 
+    #Método construtor
     def __init__(self):
         #self.ard = ard
 
@@ -62,9 +67,12 @@ class interface():
         # self.cap3= cv2.VideoCapture(2)
         # self.cam2Vaga()
 
-
+        #Depois de tudo inicializado atribui tudo ao loop do main
         self.app.mainloop()
 
+    #### FUNÇÕES
+
+    #Função da camera 1 das vagas
     def cam2Vaga(self):
         cv2image= self.cap3.read()[1]
         camFunctions.camVaga4(frame=cv2image, ard= self.ard)
@@ -72,6 +80,7 @@ class interface():
         camFunctions.camVaga6(frame=cv2image, ard= self.ard)
         self.app.after(30, self.cam2Vaga)
 
+    #Função da camera 1 das vagas
     def cam1Vaga(self):
         cv2image= self.cap2.read()[1]
         camFunctions.camVaga1(frame=cv2image, ard= self.ard)
@@ -79,13 +88,15 @@ class interface():
         camFunctions.camVaga3(frame=cv2image, ard= self.ard)
         self.app.after(30, self.cam1Vaga)
 
+    #Função da camera de reconhecimento de placa
     def camPlaca(self):
         cv2image= self.cap1.read()[1]
         camFunctions.camPlaca(frame=cv2image, interface= self)
         self.app.after(30, self.camPlaca)
 
-
+    #Função para preencher a TreeView
     def preencheTV(self, carros):
+
         #Deleta todos os itens na treeview
         self.tv.delete(*self.tv.get_children())
 
@@ -107,7 +118,7 @@ class interface():
                 self.tv.insert("", "end", values= (c[0], c[1], "R$: "+str(tarifa)+",00"))
                 self.carros_no_patio.append(c)
 
-
+    #Função para popular a TreeView
     def popularTV(self):
 
         #Seleciona os carros do banco de dados por ordem de entrada
@@ -116,40 +127,76 @@ class interface():
         
         #Preenche a treeview com os carros
         self.preencheTV(carros)
-        
+    
+    #Função para abrir a cancela
     def abrirCancela(self, cancela):
 
+        #Confere se a cancela está fechada
         if self.cancelaAberta == None:
+
+            #Se a cancela que irá ser fechada é a cancela 1
             if cancela == "c1":
+                
+                #Comando para o arduino abrir a cancela 1
                 #ard.abrirCancela1()
+
+                #Seta variável de controle da cancela que está aberta
                 self.cancelaAberta = "c1"
-                print("SRV1OP")
 
+                #Printa que a cancela foi aberta (usado para debug)
+                #print("SRV1OP")
+
+            #Se a cancela que irá ser fechada é a cancela 2
             if cancela == "c2":
+
+                #Comando para o arduino abrir a cancela 2
                 #ard.abrirCancela2()
+
+                #Seta variável de controle da cancela que está aberta
                 self.cancelaAberta = "c2"
-                print("SRV2OP")
 
+                #Printa que a cancela foi aberta (usado para debug)
+                #print("SRV2OP")
+
+    #Função para fechar a cancela
     def fecharCancela(self):
-
+        
+        #Espera o tempo de 2 segundos para fechar a cancela
         t.sleep(2)
+
+        #Checa qual cancela está aberta
         if self.cancelaAberta == "c1":
+
+            #Comando para fechar a cancela 1
             #ard.fecharCancela1()
+
+            #Seta variável de controle que nenhuma cancela está aberta 
             self.cancelaAberta = None
-            print("SRV1CL")
+
+            #Printa que a cancela foi fechada (usado para debug)
+            #print("SRV1CL")
 
         if self.cancelaAberta == "c2":
-            #ard.fecharCancela2()
-            self.cancelaAberta = None   
-            print("SRV2CL")
 
+            #Comando para fechar a cancela 1
+            #ard.fecharCancela2()
+
+            #Seta variável de controle que nenhuma cancela está aberta
+            self.cancelaAberta = None   
+            
+            #Printa que a cancela foi fechada (usado para debug)
+            #print("SRV2CL")
+
+    #Função inserir, que lê a placa escrita no Entry e insere ou atualiza o registro no banco de dados
     def inserir(self):
+
         #Verificando se todos os campos foram preenchidos
         if self.cplaca.get()== "":
             messagebox.showerror(title= "ERRO", message= "Preencha todos os campos!!")
             self.cplaca.focus()
             return
 
+        #Pegando o horário de agora
         e = datetime.now()
         horaEnt = "%s/%s/%s " % (e.day, e.month, e.year)
         horaEnt += "%s:%s:%s" % (e.hour, e.minute, e.second)
@@ -159,15 +206,24 @@ class interface():
             #Query para selecionar o caror do banco de dados
             vquery= "SELECT * FROM tb_carros WHERE T_PLACA LIKE '%" + self.cplaca.get() + "%'"
             carros = banco.dql(vquery)
-        
+
+            #Atribui os valores do último registro do carro
             for carro in carros:
+
+                #Valor da placa
                 vPlaca= carro[0]
+
+                #Valor da data de entrada
                 vEntrada= carro[1]
+
+                #Valor da data de saída
                 vSaida= carro[2]
             
             #Se o carro ainda não deu saida, é um carro que está no pátio
             #logo prossegue dando saida
             if vSaida == None:
+
+                #Chamando função saída
                 self.saida(vPlaca, vEntrada)
                 return
 
@@ -175,27 +231,43 @@ class interface():
             #que ja veio antes no estacionamento, logo prossegue inserindo 
             #um novo registro
             else:
+
+                #Chamando função abrir cancela e passando a cancela da entrada (pois o carro está entrando)
                 self.abrirCancela("c1")
+
+                #Query para inserir no banco de dados
                 vquery= "INSERT INTO tb_carros (T_PLACA, T_HORARIOENT) VALUES ('"+self.cplaca.get().upper()+"','"+horaEnt+"')"
+                
+                #Executando a função dml para fazer a query
                 banco.dml(vquery)
+
+                #Atribui o valor da placa do carro que entrou para a variável de controle do camfunctions
                 camFunctions.placa = vPlaca
-                #imprimir(horaEnt= horaEnt, vPlaca= cplaca.get().upper(), vModelo= cmodelo.get().upper())
 
         #Se não conseguir é porque não tem, logo é 
         #um carro que nunca veio no estacionamento antes 
         #e prossegue para inserir no banco de dados       
         except Exception as e:
+
+            #Chamando função abrir cancela e passando a cancela da entrada (pois o carro está entrando)
             self.abrirCancela("c1")
+
+            #Query para inserir no banco de dados
             vquery= "INSERT INTO tb_carros (T_PLACA, T_HORARIOENT) VALUES ('"+self.cplaca.get().upper()+"','"+horaEnt+"')"
-            banco.dml(vquery)
-            camFunctions.placa = self.cplaca.get()
-            #imprimir(horaEnt= horaEnt, vPlaca= cplaca.get().upper(), vModelo= cmodelo.get().upper())
             
+            #Executando a função dml para fazer a query
+            banco.dml(vquery)
+
+            #Atribui o valor da placa do carro que entrou para a variável de controle do camfunctions
+            camFunctions.placa = self.cplaca.get()
+            
+        #Funções para atualizar a treeview, deletar o conteúdo do Entry e atribuir o foco ao Entry
         self.popularTV()
         self.cplaca.delete(0, END)    
         self.cplaca.focus()
 
     def saida(self, vPlaca, horaEnt):
+
         #Pega o horário atual e transforma em string
         e = datetime.now()
         horaSaida = "%s/%s/%s " % (e.day, e.month, e.year)
@@ -212,12 +284,12 @@ class interface():
             vquery= "UPDATE tb_carros SET T_HORARIOSAIDA='%s' WHERE T_PLACA= '%s' AND T_HORARIOSAIDA IS NULL" % (horaSaida, vPlaca)
             banco.dml(vquery)
 
-            #Popula a treeview
+            #Funções para atualizar a treeview, deletar o conteúdo do Entry e atribuir o foco ao Entry
             self.popularTV()
             self.cplaca.delete(0, END)    
             self.cplaca.focus()
 
-            #Abre cancela e seta o valor da placa no camfunctions
+            #Abre cancela 2 (pois o carro está saindo) e seta o valor da placa no camfunctions
             self.abrirCancela("c2")
             camFunctions.placa = vPlaca
 
@@ -228,7 +300,9 @@ class interface():
         
         return
 
+    #Função para cálcular o pagamento
     def calcPagamento(self, horaSaida, horaEntrada):
+
         #Transforma hora entrada e hora saida para objeto datetime
         hE = datetime.strptime(horaEntrada, '%d/%m/%Y %H:%M:%S') 
         hS = datetime.strptime(horaSaida, '%d/%m/%Y %H:%M:%S')
@@ -239,6 +313,7 @@ class interface():
         #Transforma de deltatime para datetime
         diaria = False
         mes = False
+
         #Descobrir se tem dia e se tiver quantos dias tem
         if permanencia.days == 0:
             tempoPermanencia = datetime.strptime(str(permanencia), '%H:%M:%S')
@@ -282,6 +357,7 @@ class interface():
             tarifa = 9+(3*horas)
             return tarifa
 
+    #Função para checar o que está sendo digitado e manda para a função de autocompletar
     def checar(self, e):
 
         #Pega todos os carros do banco de dados
@@ -350,10 +426,12 @@ class interface():
             if self.cplaca.get() == '':
                 self.popularTV()
 
+    #Função para autocompletar o que foi digitado
     def autocompletarPlaca(self, dados):
 
         #Time sleep para não atrapalhar quando estiver digitando
         t.sleep(0.1)
+        
         #Preenche a treeview com os carros sugeridos
         self.preencheTV(dados)
 
