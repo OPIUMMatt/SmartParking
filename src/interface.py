@@ -168,7 +168,6 @@ class interface():
             #Se o carro ainda não deu saida, é um carro que está no pátio
             #logo prossegue dando saida
             if vSaida == None:
-                self.abrirCancela("c2")
                 self.saida(vPlaca, vEntrada)
                 return
 
@@ -179,6 +178,7 @@ class interface():
                 self.abrirCancela("c1")
                 vquery= "INSERT INTO tb_carros (T_PLACA, T_HORARIOENT) VALUES ('"+self.cplaca.get().upper()+"','"+horaEnt+"')"
                 banco.dml(vquery)
+                camFunctions.placa = vPlaca
                 #imprimir(horaEnt= horaEnt, vPlaca= cplaca.get().upper(), vModelo= cmodelo.get().upper())
 
         #Se não conseguir é porque não tem, logo é 
@@ -188,6 +188,7 @@ class interface():
             self.abrirCancela("c1")
             vquery= "INSERT INTO tb_carros (T_PLACA, T_HORARIOENT) VALUES ('"+self.cplaca.get().upper()+"','"+horaEnt+"')"
             banco.dml(vquery)
+            camFunctions.placa = self.cplaca.get()
             #imprimir(horaEnt= horaEnt, vPlaca= cplaca.get().upper(), vModelo= cmodelo.get().upper())
             
         self.popularTV()
@@ -215,6 +216,10 @@ class interface():
             self.popularTV()
             self.cplaca.delete(0, END)    
             self.cplaca.focus()
+
+            #Abre cancela e seta o valor da placa no camfunctions
+            self.abrirCancela("c2")
+            camFunctions.placa = vPlaca
 
         except Exception as e:
             #Erro é mostrado como uma messagebox

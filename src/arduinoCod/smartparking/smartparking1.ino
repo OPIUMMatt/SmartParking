@@ -17,7 +17,7 @@ void setup() {
   	Serial.begin(9600);
   	servo1.attach(pinServo1);
   	servo2.attach(pinServo2);
-	  pinMode(LED1, OUTPUT);
+	pinMode(LED1, OUTPUT);
   	pinMode(LED2, OUTPUT);
   	pinMode(LED3, OUTPUT);
   	pinMode(LED4, OUTPUT);

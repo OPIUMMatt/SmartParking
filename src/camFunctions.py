@@ -40,6 +40,7 @@ def camPlaca(frame, interface):
     probabilities = model.predict(image, verbose = 0)
     #print(probabilities)
     obj = labels[np.argmax(probabilities)]
+    
     if obj[0] == "0":
         placa_detec = True
     else:
@@ -141,11 +142,10 @@ def camPlaca(frame, interface):
         if (framecount <= 50):
             framecount += 1
             if framecount == 50 and placa != None:
-                print("SRV1CLOSE")
                 interface.fecharCancela()
                 placa = None
         else:
-            framecount = 51
+            framecount = 0
 
     cv2.imshow("Imagem video", frame)
 
