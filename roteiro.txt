@@ -1,7 +1,0 @@
-Roteiro do vídeo:
-	Se apresentar
-	Falar do problema que identificamos (demora no atendimento de estacionamentos)
-	Falar da ideia do projeto que consiste em automatizar um estacionamento (automatizando o registro dos carros no programa e colocando um algoritmo de detecção de presença de carro)
-	Falar sobre como isso pode impactar em um estacionamento real (diminuindo custos com funcionários, aumentando a velocidade do atendimento)
-	
-	

@@ -52,14 +52,14 @@ pathLabel = pastaApp + "//keras_model//labels.txt"
 model = load_model(pathModelo)
 
 #Leitura dos labels do ml
-labels = open(pathLabel, 'r').readlines()
+labels = open(pathLabel, "r").readlines()
 
 #Setando linguagem do easyocr para inglês
-reader = easyocr.Reader(['en'])
+reader = easyocr.Reader(["en"])
 
 #Setando números e letras aceitas
 nums = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
-letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+letters = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
 
 
 #### FUNÇÕES
@@ -219,25 +219,25 @@ def camPlaca(frame, interface):
                             
                             #Checando se os 3 primeiros digitos são letras, se não for, placa_invalida se torna True
                             if i < 3:
-                                if numPlaca[i] not in letters:
+                                if numPlaca[i].lower() not in letters:
                                     placa_invalida = True
                                     break
                             
                             #Checando se o quarto dígito é número, se não for, placa_invalida se torna True
                             elif i == 3:
-                                if numPlaca[i] not in nums:
+                                if numPlaca[i].lower() not in nums:
                                     placa_invalida = True
                                     break
                             
                             #Checando se o quinto dígito é um número ou letra, se não for, placa_invalida se torna True
                             elif i == 4:
-                                if numPlaca[i] not in nums or numPlaca[i] not in letters:
+                                if numPlaca[i].lower() not in nums and numPlaca[i].lower() not in letters:
                                     placa_invalida = True
                                     break
                             
                             #Checando se os dois últimos dígitos são números, se não for, placa_invalida se torna True
                             elif i > 4:
-                                if numPlaca[i] not in nums:
+                                if numPlaca[i].lower() not in nums:
                                     placa_invalida = True
                                     break
 
